@@ -1,20 +1,24 @@
+require('dotenv').config();
+const mongoose = require('mongoose');
 const express = require('express');
-const connectDB = require('./config/db');
-const cors = require('cors');
-const dotenv = require('dotenv');
-
-dotenv.config();
-
 const app = express();
 
-connectDB();
+const uri = process.env.MONGODB_URI;
+const port = process.env.PORT || 3000;
+const sendgridApiKey = process.env.SENDGRID_API_KEY;
 
-app.use(express.json({ extended: false }));
-app.use(cors());
+if (!uri) {
+  throw new Error('MONGODB_URI is not defined');
+}
 
-app.use('/api/auth', require('./routes/authRoutes'));
-app.use('/api/bookings', require('./routes/bookingRoutes'));
+if (!sendgridApiKey.startsWith("SG.")) {
+  throw new Error("API key does not start with 'SG.'");
+}
 
-const PORT = process.env.PORT || 5000;
+mongoose.connect(uri, { useNewUrlParser: true, useUnifiedTopology: true })
+  .then(() => console.log('Connected to MongoDB'))
+  .catch(err => console.error('Error connecting to MongoDB:', err));
 
-app.listen(PORT, () => console.log(`Server started on port ${PORT}`));
+app.listen(port, () => {
+  console.log(`Server started on port ${port}`);
+});i
