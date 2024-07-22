@@ -7,6 +7,11 @@ const uri = process.env.MONGODB_URI;
 const port = process.env.PORT || 3000;
 const sendgridApiKey = process.env.SENDGRID_API_KEY;
 
+// Debugging statements to verify environment variables
+console.log('MongoDB URI:', uri);
+console.log('SendGrid API Key:', sendgridApiKey);
+console.log('Port:', port);
+
 if (!uri) {
   throw new Error('MONGODB_URI is not defined');
 }
@@ -21,4 +26,4 @@ mongoose.connect(uri, { useNewUrlParser: true, useUnifiedTopology: true })
 
 app.listen(port, () => {
   console.log(`Server started on port ${port}`);
-});i
+});
